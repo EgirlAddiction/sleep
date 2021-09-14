@@ -1,4 +1,5 @@
 const { Client, Intents } = require('discord.js');
+const { resourceLimits } = require('worker_threads');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 // const config = require('./config.json');
 const command = require('./command')
@@ -16,13 +17,13 @@ client.on('ready', () => {
         })
     })
 
-    command(client, ['cc', 'clearchannel'], (message) => {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            message.channel.messages.fetch().then((results) => {
-                message.channel.bulkDelete(results)
+    command(client, ['cc', 'clearchannel'], message =>{
+        if (message.member.hasPermission('ADMINISTRATOR')){
+            message.channel.messages.fetch().then(messages => {
+                message.channel.bulkDelete(messages)
             })
         }
     })
-});
+})
 
 client.login(process.env.DJS_TOKEN)
